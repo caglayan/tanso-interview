@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { Prop } from '@nestjs/mongoose';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
+import { find } from 'rxjs';
 import { RecordFactoryService } from './record-factory.service';
 import { Record } from './schemas/record.schema';
 
 export class RecordDto extends Record {
   @IsString()
-  @Prop({ required: true })
   updatedBy: string;
 }
 
@@ -15,19 +15,25 @@ export class RecordFactoryController {
   constructor(private readonly recordFactoryService: RecordFactoryService) {}
 
   @Post()
-  public async createRecord(@Body() recordDto: RecordDto): Promise<void> {
+  public async createRecord(@Body() recordDto: RecordDto): Promise<Record> {
     return this.recordFactoryService.create(recordDto as Record);
   }
 
   @Put(':id')
-  public updateRecord(@Param() id: string): void {
-    console.log('Updated ', id);
+  public async updateRecord(@Param('id') id: string, @Body() recordDto: RecordDto): Promise<Record> {
+    if (!id || !recordDto._id || id !== recordDto._id) {
+      throw new BadRequestException();
+    }
+
+    return this.recordFactoryService.update(recordDto as Record, id);
   }
 
-  @Get()
-  public getRecord(): string {
-    console.log('Get record');
+  @Get(':id')
+  public getRecord(@Param('id') id: string): Promise<Record> {
+    if (!id) {
+      throw new BadRequestException();
+    }
 
-    return 'Hello Server';
+    return this.recordFactoryService.find(id);
   }
 }
