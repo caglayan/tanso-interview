@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Put } from '@nestjs/common';
+import { RecordFactoryService } from './record-factory.service';
 
 @Controller('record')
 export class RecordFactoryController {
+
+    constructor(private readonly recordFactoryService:RecordFactoryService) {}
 
     @Post()
     public createRecord():void{
