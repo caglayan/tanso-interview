@@ -1,4 +1,4 @@
-import { Controller, Post, Put } from '@nestjs/common';
+import { Controller, Get, Post, Put } from '@nestjs/common';
 
 @Controller('record')
 export class RecordFactoryController {
@@ -11,6 +11,13 @@ export class RecordFactoryController {
     @Put()
     public updateRecord():void{
         console.log('Updated')
+    }
+
+    @Get()
+    public getRecord():string{
+        console.log('Get record')
+        
+        return 'Hello Server'
     }
 
 }
