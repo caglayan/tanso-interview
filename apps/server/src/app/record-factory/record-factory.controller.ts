@@ -1,7 +1,16 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Put } from '@nestjs/common';
 
-@Controller('record-factory')
+@Controller('record')
 export class RecordFactoryController {
 
+    @Post()
+    public createRecord():void{
+        console.log('Created')
+    }
+
+    @Put()
+    public updateRecord():void{
+        console.log('Updated')
+    }
 
 }
