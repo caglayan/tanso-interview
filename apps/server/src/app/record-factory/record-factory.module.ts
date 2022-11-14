@@ -7,6 +7,6 @@ import { Record, RecordSchema } from './schemas/record.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Record.name, schema: RecordSchema }])],
   controllers: [RecordFactoryController],
-  providers: [RecordFactoryService]
+  providers: [RecordFactoryService],
 })
 export class RecordFactoryModule {}
