@@ -8,9 +8,9 @@ export class AuditPointFactoryController {
 
   @Post()
   public async createAuditPoint(@Body() auditPointDto: AuditPoint): Promise<AuditPoint> {
-    throw new BadRequestException();
+    //throw new BadRequestException();
 
-    //return this.auditPointFactoryService.create(auditPointDto);
+    return this.auditPointFactoryService.create(auditPointDto);
   }
 
   @Get(':id')
