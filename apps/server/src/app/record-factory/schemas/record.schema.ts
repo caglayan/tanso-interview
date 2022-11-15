@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsMongoId, isMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 
 export type RecordDocument = HydratedDocument<Record>;

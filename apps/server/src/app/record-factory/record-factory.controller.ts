@@ -1,7 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { Prop } from '@nestjs/mongoose';
-import { IsOptional, IsString } from 'class-validator';
-import { find } from 'rxjs';
+import { IsString } from 'class-validator';
 import { RecordFactoryService } from './record-factory.service';
 import { Record } from './schemas/record.schema';
 
@@ -16,7 +14,7 @@ export class RecordFactoryController {
 
   @Post()
   public async createRecord(@Body() recordDto: RecordDto): Promise<Record> {
-    return this.recordFactoryService.create(recordDto as Record);
+    return this.recordFactoryService.create(recordDto);
   }
 
   @Put(':id')
@@ -25,7 +23,7 @@ export class RecordFactoryController {
       throw new BadRequestException();
     }
 
-    return this.recordFactoryService.update(recordDto as Record, id);
+    return this.recordFactoryService.update(recordDto, id);
   }
 
   @Get(':id')
