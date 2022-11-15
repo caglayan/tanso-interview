@@ -19,6 +19,7 @@ export class AuditConsumerService {
       },
       error: (error) => {
         this.logger.error(`Attempts Made: ${job.attemptsMade} error: ${error}`);
+        job.discard();
         done(error);
       },
     });

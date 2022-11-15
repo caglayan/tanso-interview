@@ -7,7 +7,7 @@ import { BullModule } from '@nestjs/bull';
 import { AuditConsumerModule } from './audit-consumer/audit-consumer.module';
 import { AuditFactoryModule } from './audit-factory/audit-factory.module';
 
-function retryStrategy(attemptsMade: number, err: Error): number {
+function retryStrategy(attemptsMade: number): number {
   return 1000 * Math.pow(2, attemptsMade);
 }
 
