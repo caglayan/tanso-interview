@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve server& nx serve ui",
+    "start": "nx serve server& nx serve audit-server",
     "build": "nx build",
     "test": "nx test"
   },
@@ -17,6 +17,7 @@
     "@angular/platform-browser": "~14.2.0",
     "@angular/platform-browser-dynamic": "~14.2.0",
     "@angular/router": "~14.2.0",
+    "@nestjs/axios": "^1.0.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
@@ -53,7 +54,7 @@
     "@nrwl/workspace": "15.0.13",
     "@types/bull": "^4.10.0",
     "@types/jest": "28.1.1",
-    "@types/node": "16.11.7",
+    "@types/node": "18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "cypress": "^10.7.0",

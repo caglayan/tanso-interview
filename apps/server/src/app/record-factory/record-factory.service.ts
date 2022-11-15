@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Record, RecordDocument } from './schemas/record.schema';
@@ -35,6 +35,10 @@ export class RecordFactoryService {
     const record = await this.recordModel.findById(id),
       keys = Object.keys(recordDto),
       auditPoint: AuditPoint = { changeMethod: 'UPDATE', changedDateTime: new Date().toISOString(), updatedBy: recordDto.updatedBy };
+
+    if (!record) {
+      throw new NotFoundException();
+    }
 
     let changed = false;
     for (const key in record) {

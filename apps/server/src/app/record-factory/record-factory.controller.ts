@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { IsString } from 'class-validator';
 import { RecordFactoryService } from './record-factory.service';
 import { Record } from './schemas/record.schema';
@@ -27,9 +27,11 @@ export class RecordFactoryController {
   }
 
   @Get(':id')
-  public getRecord(@Param('id') id: string): Promise<Record> {
-    if (!id) {
-      throw new BadRequestException();
+  public async getRecord(@Param('id') id: string): Promise<Record> {
+    const record = await this.recordFactoryService.find(id);
+
+    if (!record) {
+      throw new NotFoundException();
     }
 
     return this.recordFactoryService.find(id);
