@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { HttpModule } from '@nestjs/axios';
 import { AuditFactoryService } from './audit-factory.service';
-import { AuditPoint, AuditPointSchema } from './schemas/audit-point.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: AuditPoint.name, schema: AuditPointSchema }])],
+  imports: [HttpModule],
   providers: [AuditFactoryService],
   exports: [AuditFactoryService],
 })

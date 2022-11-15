@@ -7,6 +7,10 @@ import { BullModule } from '@nestjs/bull';
 import { AuditConsumerModule } from './audit-consumer/audit-consumer.module';
 import { AuditFactoryModule } from './audit-factory/audit-factory.module';
 
+function retryStrategy(attemptsMade: number, err: Error): number {
+  return 1000 * Math.pow(2, attemptsMade);
+}
+
 @Module({
   imports: [
     RecordFactoryModule,
@@ -15,6 +19,11 @@ import { AuditFactoryModule } from './audit-factory/audit-factory.module';
       redis: {
         host: 'localhost',
         port: 6379,
+      },
+      settings: {
+        backoffStrategies: {
+          customStrategy: retryStrategy,
+        },
       },
     }),
     AuditConsumerModule,

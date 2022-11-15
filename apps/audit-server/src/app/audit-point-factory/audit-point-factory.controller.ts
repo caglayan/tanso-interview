@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { AuditPointFactoryService } from './audit-point-factory.service';
 import { AuditPoint } from './schemas/audit-point.schema';
 
@@ -8,7 +8,9 @@ export class AuditPointFactoryController {
 
   @Post()
   public async createAuditPoint(@Body() auditPointDto: AuditPoint): Promise<AuditPoint> {
-    return this.auditPointFactoryService.create(auditPointDto);
+    throw new BadRequestException();
+
+    //return this.auditPointFactoryService.create(auditPointDto);
   }
 
   @Get(':id')

@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Record, RecordDocument } from './schemas/record.schema';
-import { Queue } from 'bull';
+import { Queue, Job } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import { RecordDto } from './record-factory.controller';
-import { AuditPoint } from '../audit-factory/schemas/audit-point.schema';
+import { AuditPoint } from '../audit-factory/audit-point.interface';
 
 @Injectable()
 export class RecordFactoryService {
+  private readonly logger = new Logger('RecordFactoryService');
+
   constructor(
     @InjectModel(Record.name) private recordModel: Model<RecordDocument>,
     @InjectQueue('audit-queue') private auditQueue: Queue<AuditPoint>,
@@ -26,7 +28,7 @@ export class RecordFactoryService {
         changedDateTime: new Date().toISOString(),
       };
 
-    await this.auditQueue.add(auditPoint);
+    await this.addToQueue(auditPoint);
 
     return createdRecord;
   }
@@ -49,10 +51,22 @@ export class RecordFactoryService {
     }
 
     if (changed) {
-      await this.auditQueue.add(auditPoint);
+      await this.addToQueue(auditPoint);
       return this.recordModel.findByIdAndUpdate(id, recordDto as Record, { new: true });
+    } else {
+      this.logger.warn('Nothing is updated');
     }
 
     return record;
+  }
+
+  private async addToQueue(auditPoint: AuditPoint): Promise<Job<AuditPoint>> {
+    return this.auditQueue.add(auditPoint, {
+      attempts: 5,
+      backoff: {
+        type: 'customStrategy',
+      },
+      removeOnComplete: true,
+    });
   }
 }
